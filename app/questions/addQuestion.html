@@ -1,0 +1,30 @@
+<div ng-controller="AddQuestionCtrl as $ctrl">
+    Добавить вопрос
+    <form>
+        <select name="Category" id="category" ng-model="$ctrl.selectedCategory"
+                ng-options="category.category for category in $ctrl.categories" required></select>
+        <select name="Type" id="type" ng-model="$ctrl.selectedType"
+                ng-options="type.type for type in $ctrl.questionTypes" required></select>
+        <input type="text" ng-model="$ctrl.question" placeholder="введите вопрос">
+        <div ng-if="$ctrl.selectedType.id === 3" ng-init="$ctrl.dropOptions();">
+            <input type="text" ng-model="$ctrl.selectedQuestionOptions[0].value" ng-init="$ctrl.selectedQuestionOptions[0].isCorrect = true;" placeholder="Введите ответ">
+        </div>
+        <div ng-if="$ctrl.selectedType.id === 2" ng-model="$ctrl.selectedQuestionOptions" ng-init="$ctrl.count != 1 ? null : $ctrl.count = 1;">
+            <div ng-repeat="i in $ctrl.getNum() track by $index">
+                <input type="text" placeholder="Введите вариант" ng-model="$ctrl.selectedQuestionOptions[i].value">
+                <input type="checkbox" ng-model="$ctrl.selectedQuestionOptions[i].isCorrect" ng-init="$ctrl.selectedQuestionOptions[i].isCorrect = false;">
+            </div>
+            <button ng-click="$ctrl.incCount();">add option</button>
+            <button ng-click="$ctrl.dropOptions();">сбросить варианты</button>
+        </div>
+        <div ng-if="$ctrl.selectedType.id === 1" ng-init="$ctrl.count != 1 ? null : $ctrl.count = 1;">
+            <div ng-repeat="i in $ctrl.getNum() track by $index">
+                <input type="text" placeholder="Введите вариант" ng-model="$ctrl.selectedQuestionOptions[i].value">
+                <input type="radio" name="several" ng-value="true" ng-click="$ctrl.setOtherOptionsNotCorrect(i);" ng-model="$ctrl.selectedQuestionOptions[i].isCorrect" ng-init="$ctrl.selectedQuestionOptions[i].isCorrect = false;">
+            </div>
+            <button ng-click="$ctrl.incCount();">add option</button>
+            <button ng-click="$ctrl.count = 1;">сбросить варианты</button>
+        </div>
+        <button ng-click="$ctrl.addQuestion()">add question</button>
+    </form>
+</div>

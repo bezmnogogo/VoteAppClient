@@ -1,0 +1,81 @@
+<div ng-controller="AddTestCtrl as $ctrl">
+    <div style="width: 100%;">
+        <div>
+            Ограничить по времени? <input type="checkbox" ng-model="$ctrl.testOptions.isTimeLimited" ng-init="$ctrl.testOptions.isTimeLimited = false;">
+            <input ng-if="$ctrl.testOptions.isTimeLimited" type="number" ng-model="$ctrl.testOptions.minutes"
+                   placeholder="введите время ограничения">
+        </div>
+        <div>
+            Шкала оценок <input type="number" ng-model="$ctrl.testOptions.scale" placeholder="введите число">
+        </div>
+        <div>
+            Учитывать весы вопросов? <input type="checkbox" ng-model="$ctrl.testOptions.useQuestionWeight" ng-init="$ctrl.testOptions.useQuestionWeight = false;">
+        </div>
+        <div ng-model="$ctrl.selectedQuestionOptions" ng-init="$ctrl.peopleCount != 1 ? null : $ctrl.peopleCount = 1;">
+            <div ng-repeat="i in $ctrl.getPeopleNum() track by $index">
+                <input type="email" placeholder="введите e-mail тестируемого" ng-model="$ctrl.testPeople[i]">
+                <button ng-click="$ctrl.cancelOneMail(i);">убрать</button>
+            </div>
+            <button ng-click="$ctrl.incPeopleCount();">add man</button>
+            <button ng-click="$ctrl.dropOptions();">сбросить варианты</button>
+        </div>
+        <div style="display: flex; flex-direction: row;">
+            <div id="existQuestions">
+                <ul>
+                    <li ng-repeat="category in $ctrl.categories">
+                        <a style="display: inline-block; border: none;"
+                           ng-click="$ctrl.showCategoryQuestions(category);">{{category.category}}</a>
+                        <ul ng-if="$ctrl.categoryQuestions[0].questionCategory.id == category.id">
+                            <li ng-repeat="question in $ctrl.categoryQuestions">
+                                <a style="display: inline-block; border: none;"
+                                   ng-click="$ctrl.addTestQuestion(question)"> {{question.question}}</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="newQuestion" style="border-left: 1px solid #00b3ee; margin-left: 20px;padding-left: 10px;">
+                <select name="Category" id="category" ng-model="$ctrl.selectedCategory"
+                        ng-options="category.category for category in $ctrl.categories" required></select>
+                <select name="Type" id="type" ng-model="$ctrl.selectedType"
+                        ng-options="type.type for type in $ctrl.questionTypes" required></select>
+                <input type="text" ng-model="$ctrl.question" placeholder="введите вопрос">
+                <div ng-if="$ctrl.selectedType.id === 3" ng-init="$ctrl.dropOptions();">
+                    <input type="text" ng-model="$ctrl.selectedQuestionOptions[0].value" ng-init="$ctrl.selectedQuestionOptions[0].isCorrect = true;" placeholder="Введите ответ">
+                </div>
+                <div ng-if="$ctrl.selectedType.id === 2" ng-model="$ctrl.selectedQuestionOptions" ng-init="$ctrl.count != 1 ? null : $ctrl.count = 1;">
+                    <div ng-repeat="i in $ctrl.getNum() track by $index">
+                        <input type="text" placeholder="Введите вариант" ng-model="$ctrl.selectedQuestionOptions[i].value">
+                        <input type="checkbox" ng-model="$ctrl.selectedQuestionOptions[i].isCorrect" ng-init="$ctrl.selectedQuestionOptions[i].isCorrect = false;">
+                    </div>
+                    <button ng-click="$ctrl.incCount();">add option</button>
+                    <button ng-click="$ctrl.dropOptions();">сбросить варианты</button>
+                </div>
+                <div ng-if="$ctrl.selectedType.id === 1" ng-init="$ctrl.count != 1 ? null : $ctrl.count = 1;">
+                    <div ng-repeat="i in $ctrl.getNum() track by $index">
+                        <input type="text" placeholder="Введите вариант" ng-model="$ctrl.selectedQuestionOptions[i].value">
+                        <input type="radio" name="several" ng-value="true" ng-click="$ctrl.setOtherOptionsNotCorrect(i);" ng-model="$ctrl.selectedQuestionOptions[i].isCorrect" ng-init="$ctrl.selectedQuestionOptions[i].isCorrect = false;">
+                    </div>
+                    <button ng-click="$ctrl.incCount();">add option</button>
+                    <button ng-click="$ctrl.count = 1;">сбросить варианты</button>
+                    <button ng-click="$ctrl.addQuestion()">add question</button>
+                </div>
+            </div>
+
+            <div id="addedQuestion" style="border-left: 1px solid #00b3ee;margin-left: 20px; padding-left: 10px;">
+                <div ng-model="$ctrl.selectedQuestionOptions"
+                     ng-init="$ctrl.testQuestionCount != 1 ? null : $ctrl.testQuestionCount = 1;">
+                    <div ng-repeat="i in $ctrl.getTestQuestionNum() track by $index">
+                        <!--<input type="email" placeholder="введите e-mail тестируемого" ng-model="$ctrl.testPeople[i]">-->
+                        <span>{{$ctrl.testQuestions[i].question}}</span>
+                        <button ng-if="$ctrl.testQuestions[i];" ng-click="$ctrl.cancelOneTestQuestion(i);">убрать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 20px; width: 100%; border-top: 1px solid blue; align: center;">
+            <button ng-click="$ctrl.createTest()">Создать тест</button>
+        </div>
+    </div>
+</div>

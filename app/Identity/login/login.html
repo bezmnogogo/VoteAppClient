@@ -1,0 +1,7 @@
+<div ng-controller="LoginCtrl as $ctrl">
+    This is login page {{$ctrl.test}}
+    <input type="text" ng-model="$ctrl.user.email" required>
+    <input type="password" ng-model="$ctrl.user.password" required>
+    <button ng-click="$ctrl.login()"></button>
+    <span>{{$ctrl.serverResponse}}</span>
+</div>

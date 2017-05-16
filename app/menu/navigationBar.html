@@ -1,0 +1,13 @@
+<ul class="menu">
+    <li><a href="#!/login">login</a></li>
+    <li><a href="#!/view2">view2</a></li>
+    <li><a href="#!/questions">addCategory</a></li>
+    <li><a href="#!/registration">registration</a></li>
+    <li><a href="#!/test/add">add test</a></li>
+    <li ng-if="!$ctrl.identityService.quickInfo">
+        <a href="#!/login">login</a>
+    </li>
+    <li ng-if="$ctrl.identityService.quickInfo">
+        <button ng-click="$ctrl.logout()">logout({{$ctrl.identityService.quickInfo}})</button>
+    </li>
+</ul>
